@@ -1,5 +1,5 @@
 {
-  "name": "comp_inventory",
+  "name": "Inventory_IU",
   "version": "1.0.0",
   "description": "BUild the inventory of components in selected pages of a figma file",
   "main": "code.js",
