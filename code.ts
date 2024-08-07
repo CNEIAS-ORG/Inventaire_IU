@@ -11,6 +11,7 @@
 // full browser environment (See https://www.figma.com/plugin-docs/how-plugins-run).
 
 // This shows the HTML page in "ui.html".
+// Cette version de code fonctionne sur n'importe quelle maquette.
 figma.showUI(__html__);
 
 // Calls to "parent.postMessage" from within the HTML page will trigger this
@@ -116,6 +117,7 @@ function listComposants() {
 
 // Générateur qui produit tous les nœuds dans le sous-arbre
 // en commençant par le nœud donné
+// 
 function* walkTree(node: BaseNode): IterableIterator<BaseNode> {
   yield node;  // Renvoyer le nœud actuel
   if ('children' in node) {
@@ -433,7 +435,7 @@ for (let i = 0; i < rootNodes.length; i++) {
 async function assignText() {
   let inventoryPage = figma.root.findChild(node => node.name === 'Inventaire');
 
-  // Créer une page et un rapport
+  // Créer une page et un rapport 
   try {
     if (inventoryPage === null) {
       // Create page and report
