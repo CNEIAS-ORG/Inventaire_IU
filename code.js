@@ -23,20 +23,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 figma.showUI(__html__);
 // Les appels à "parent.postMessage" depuis la page HTML déclencheront ce callback.
 // Le callback recevra la propriété "pluginMessage" du message posté.
-let rapport = 'INVENTAIRE DES COMPOSANTS' + '\n' + '\n'; // ancien page avec la nouvelle page 
+let rapport = 'INVENTAIRE DES COMPOSANTS' + '\n' + '\n'; // ancien page avec la nouvelle page
 // Ensemble pour suivre les IDs traités
 let processedIds = new Set();
+let msg_1_String = "";
 // Gestion des messages envoyés depuis l'interface utilisateur
 figma.ui.onmessage = (msg) => __awaiter(void 0, void 0, void 0, function* () {
     if (msg.type === 'create-inventory') {
         // Lancer la génération de l'inventaire
         listComposants();
     }
+    ///////////Recherche composant//////////
+    // Search component
+    if (msg.type === 'display-composant-id-1') {
+        msg_1_String = String(msg.count);
+    }
+    if (msg.type === 'display-composant-id-2') {
+        let msg_2_String = msg.count;
+        let msg_String = msg_1_String + ':' + msg_2_String;
+        center_on_this(figma.currentPage, msg_String);
+    }
+    /////////////////
     if (msg.type === 'cancel') {
         // Fermer le plugin
         figma.closePlugin();
     }
 });
+// Fonction pour centrer sur un élément spécifique dans la page courante
+function center_on_this(currentPage, msg_String) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let nodes = currentPage.findAll(n => n.id === msg_String);
+        figma.currentPage.selection = nodes;
+        figma.viewport.scrollAndZoomIntoView(nodes); // Zoomer la vue sur un nœud donné
+    });
+}
 // Fonction pour lister tous les composants
 function listComposants() {
     const currentPage = figma.currentPage; // Obtient la page active
@@ -46,7 +66,6 @@ function listComposants() {
     // Réinitialiser l'ensemble des IDs traités pour éviter des doublons entre les pages
     processedIds.clear();
     // Itérer à travers tous les nœuds de la page courante
-    //node prendra la valeur du prochain nœud renvoyé par le générateur walkTree(currentPage).
     for (const node of walkTree(currentPage)) {
         analyse_element(node);
     }
@@ -76,12 +95,11 @@ function analyse_element(layer, depth = 0) {
     }
     // Ajouter les informations de base du nœud au rapport avec une indentation basée sur la profondeur
     rapport += `${'  '.repeat(depth)}${layer.type}\n`;
-    rapport += `${'   '.repeat(depth)} _Nom : ${layer.name} _Id : ${layer.id}\n`;
+    rapport += `${'  '.repeat(depth)}Nom : ${layer.name} Id : ${layer.id}\n`;
     // Ajouter les dimensions si disponibles
     if ('width' in layer && 'height' in layer) {
-        rapport += `${'   '.repeat(depth)} _Position x : ${layer.x} _Position y : ${layer.y} _Height : ${layer.height} _Width : ${layer.width}\n`;
+        rapport += `${'  '.repeat(depth)}Position x : ${layer.x} Position y : ${layer.y} Height : ${layer.height} Width : ${layer.width}\n`;
     }
-    rapport += '\n';
     // Analyser les enfants si le nœud est un groupe
     if ('children' in layer) {
         for (const child of layer.children) {
