@@ -1,3 +1,9 @@
+<h2>Inventaire</h2>
+<button id="inventory">Créer inventaire</button>
+<p id="report">Report ici</p>
+<br><br>
+
+
 <h2>Afficheur des composants</h2>
 <p>Saisissez l'ID d'un composant pour centrer la vue sur lui!</p>
 <br><br>
@@ -5,47 +11,55 @@
 <span>:</span>
 <p>ID_2: <input id="id_2_Composant" value=""></p>
 <button id="show-composant">Montrer le composant</button>
-<h2>Inventaire</h2>
-<button id="inventory">Créer inventaire</button>
-<p id="report">Report ici</p>
-<br><br>
+
 <button id="cancel">Fermer plugin</button>
+
 <br><br>
+
+<!--
 <h2>Rectangle Creator</h2>
 <p>Count: <input id="count" value="5"></p>
 <button id="rectangles">Create rectangles</button>
+-->
+
 
 <script>
-let id_1_number = null;
-let id_2_number = null;
+let id_1_number=null;
+let id_2_number=null;
 
-document.getElementById('rectangles').onclick = () => {
-  const textbox = document.getElementById('count');
-  const count = parseInt(textbox.value, 10);
-  parent.postMessage({ pluginMessage: { type: 'create-rectangles', count } }, '*');
-}
 
-document.getElementById('inventory').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'create-inventory' } }, '*');
-}
 
-document.getElementById('show-composant').onclick = () => {
-  const champ_ID_1 = document.getElementById('id_1_Composant');
-  id_1_number = champ_ID_1.value;
-  const champ_ID_2 = document.getElementById('id_2_Composant');
-  id_2_number = champ_ID_2.value;
-  if (id_1_number !== "" && id_2_number !== "") {
-    parent.postMessage({ pluginMessage: { type: 'display-composant-id-1', count: id_1_number } }, '*');
-    parent.postMessage({ pluginMessage: { type: 'display-composant-id-2', count: id_2_number } }, '*');
+/*
+  document.getElementById('rectangles').onclick = () => {
+    const textbox = document.getElementById('count');
+    const count = parseInt(textbox.value, 10);
+    parent.postMessage({ pluginMessage: { type: 'create-rectangles', count } }, '*')
   }
-}
+*/
 
-onmessage = (event) => {
-  let report = document.getElementById('report');
-  report.innerText = event.data.pluginMessage;
-}
+  document.getElementById('inventory').onclick = () => {
+    parent.postMessage({ pluginMessage: { type: 'create-inventory' } }, '*')
+  }
 
-document.getElementById('cancel').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
-}
+  document.getElementById('show-composant').onclick = () => {
+    const champ_ID_1 = document.getElementById('id_1_Composant');
+    id_1_number =  parseInt(champ_ID_1.value, 10);
+    const champ_ID_2 = document.getElementById('id_2_Composant');
+    id_2_number =  parseInt(champ_ID_2.value, 10);
+    if (id_1_number !== null && id_2_number !== null) { 
+        count=id_1_number; 
+        parent.postMessage({ pluginMessage: { type: 'display-composant-id-1', count } }, '*') 
+        count=id_2_number;
+        parent.postMessage({ pluginMessage: { type: 'display-composant-id-2', count } }, '*') 
+      }
+  }
+
+  onmessage = (event) => {
+    let report = document.getElementById('report');
+    report.innerText = event.data.pluginMessage;
+  }
+
+  document.getElementById('cancel').onclick = () => {
+    parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
+  }
 </script>

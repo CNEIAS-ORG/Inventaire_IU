@@ -34,7 +34,6 @@ figma.ui.onmessage = (msg) => __awaiter(void 0, void 0, void 0, function* () {
         listComposants();
     }
     ///////////Recherche composant//////////
-    // Search component
     if (msg.type === 'display-composant-id-1') {
         msg_1_String = String(msg.count);
     }
